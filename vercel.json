@@ -4,7 +4,7 @@
   "outputDirectory": "dist",
   "functions": {
     "api/index.ts": {
-      "maxDuration": 300
+      "maxDuration": 60
     }
   },
   "routes": [
@@ -23,6 +23,5 @@
       "src": "/(.*)",
       "dest": "/index.html"
     }
-  ],
-  "fluid": true
+  ]
 }
