@@ -1,0 +1,42 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function signedIn() {
+      return request.auth != null;
+    }
+    function role() {
+      return signedIn()
+        ? firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role
+        : null;
+    }
+    function staff() {
+      return role() == 'teacher' || role() == 'admin';
+    }
+    function supportedMime() {
+      return request.resource.contentType == 'application/pdf'
+        || request.resource.contentType == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        || request.resource.contentType == 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+        || request.resource.contentType.matches('image/(png|jpeg|webp)')
+        || request.resource.contentType.matches('video/(mp4|webm|quicktime)');
+    }
+
+    match /materials/{lessonId}/{fileName} {
+      // Browser only uploads. Downloads/deletes go through the authenticated API and signed URLs.
+      allow read: if false;
+      allow create: if staff()
+        && request.resource.size > 0
+        && request.resource.size < 500 * 1024 * 1024
+        && supportedMime()
+        && request.resource.metadata.lessonId == lessonId;
+      allow update, delete: if false;
+    }
+
+    match /derived/{allPaths=**} {
+      allow read, write: if false;
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

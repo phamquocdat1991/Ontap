@@ -1,0 +1,485 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Application profile keyed by Firebase Authentication UID with role-based access control (teacher, student, admin)",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "fullName": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "teacher",
+            "student",
+            "admin"
+          ]
+        },
+        "avatar": {
+          "type": "string",
+          "maxLength": 512
+        },
+        "classId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "school": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "subjectSpecialty": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "id",
+        "email",
+        "fullName",
+        "role"
+      ]
+    },
+    "Class": {
+      "title": "Class",
+      "description": "School classroom entity managed by teachers",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "grade": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "academicYear": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "teacherId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "studentCount": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "grade",
+        "teacherId"
+      ]
+    },
+    "Course": {
+      "title": "Course",
+      "description": "Subject course aligned with Vietnamese curriculum",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "subject": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "grade": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "bookSeries": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "teacherId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 1024
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "draft",
+            "published"
+          ]
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "subject",
+        "grade",
+        "teacherId"
+      ]
+    },
+    "Lesson": {
+      "title": "Lesson",
+      "description": "Individual curriculum lesson with AI or manual content",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "chapterId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "courseId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "order": {
+          "type": "number"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "draft_ai",
+            "teacher_reviewed",
+            "published"
+          ]
+        },
+        "duration": {
+          "type": "number"
+        },
+        "learningObjectives": {
+          "type": "string",
+          "maxLength": 2048
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "id",
+        "courseId",
+        "title",
+        "status"
+      ]
+    },
+    "LessonProgress": {
+      "title": "LessonProgress",
+      "description": "True granular progress tracking for a student on a lesson",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "userId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "lessonId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "completedUnits": {
+          "type": "number"
+        },
+        "totalUnits": {
+          "type": "number"
+        },
+        "percentage": {
+          "type": "number"
+        },
+        "lastPosition": {
+          "type": "number"
+        },
+        "isCompleted": {
+          "type": "boolean"
+        },
+        "lastOpenedAt": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "completedAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "lessonId",
+        "percentage"
+      ]
+    },
+    "PracticeAttempt": {
+      "title": "PracticeAttempt",
+      "description": "Student attempt for a practice quiz (max 3)",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "quizId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "lessonId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "userId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "attemptNumber": {
+          "type": "number"
+        },
+        "score": {
+          "type": "number"
+        },
+        "totalScore": {
+          "type": "number"
+        },
+        "passed": {
+          "type": "boolean"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "in_progress",
+            "submitted",
+            "timed_out"
+          ]
+        },
+        "startedAt": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "deadline": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "submittedAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "id",
+        "quizId",
+        "userId",
+        "attemptNumber",
+        "status"
+      ]
+    },
+    "Exam": {
+      "title": "Exam",
+      "description": "Formal evaluation exam with matrix and rubrics",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "courseId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "teacherId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "chapter_review",
+            "midterm",
+            "final"
+          ]
+        },
+        "durationMinutes": {
+          "type": "number"
+        },
+        "totalScore": {
+          "type": "number"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "draft_matrix",
+            "approved_matrix",
+            "generated_review",
+            "published"
+          ]
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "type",
+        "status",
+        "teacherId"
+      ]
+    },
+    "ExamAttempt": {
+      "title": "ExamAttempt",
+      "description": "Student submission for formal exam",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "examId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "userId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "studentName": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "classId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "score": {
+          "type": "number"
+        },
+        "totalScore": {
+          "type": "number"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "in_progress",
+            "submitted",
+            "graded",
+            "needs_review"
+          ]
+        },
+        "syncStatus": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "success",
+            "failed"
+          ]
+        },
+        "startedAt": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "deadline": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "submittedAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "id",
+        "examId",
+        "userId",
+        "status"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{firebaseUid}": {
+      "description": "Application profiles keyed by Firebase Authentication UID",
+      "schema": "User"
+    },
+    "/classes/{classId}": {
+      "description": "Classrooms managed by teachers",
+      "schema": "Class"
+    },
+    "/courses/{courseId}": {
+      "description": "Courses managed by teachers",
+      "schema": "Course"
+    },
+    "/chapters/{chapterId}": {
+      "description": "Course chapters"
+    },
+    "/lessons/{lessonId}": {
+      "description": "Lessons and teacher-reviewed AI content",
+      "schema": "Lesson"
+    },
+    "/materials/{materialId}": {
+      "description": "Lesson material metadata; binary upload remains out of scope"
+    },
+    "/lessonProgress/{progressId}": {
+      "description": "Per-student lesson and material progress",
+      "schema": "LessonProgress"
+    },
+    "/practiceQuizzes/{quizId}": {
+      "description": "Practice quiz definitions"
+    },
+    "/practiceAttempts/{attemptId}": {
+      "description": "Student practice attempts and grading results",
+      "schema": "PracticeAttempt"
+    },
+    "/exams/{examId}": {
+      "description": "Formal exams, matrices and questions",
+      "schema": "Exam"
+    },
+    "/examAttempts/{attemptId}": {
+      "description": "Student exam attempts and grading results",
+      "schema": "ExamAttempt"
+    },
+    "/sheetSyncLogs/{logId}": {
+      "description": "Simulated Google Sheets sync log; real Sheets API remains out of scope"
+    },
+    "/settings/system": {
+      "description": "Singleton system settings document"
+    }
+  }
+}

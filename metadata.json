@@ -1,0 +1,7 @@
+{
+  "name": "AI Learning Hub",
+  "description": "Hệ thống học tập, quản lý tiến độ, luyện tập và tạo đề kiểm tra thông minh dành cho giáo viên và học sinh phổ thông Việt Nam.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
