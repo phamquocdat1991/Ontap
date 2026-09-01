@@ -595,6 +595,15 @@ const initialData: DatabaseSchema = {
   }
 };
 
+function isReadOnlyFileSystem(): boolean {
+  return Boolean(
+    process.env.VERCEL || 
+    process.env.AWS_LAMBDA_FUNCTION_NAME || 
+    process.env.LAMBDA_TASK_ROOT ||
+    (process.env.NODE_ENV === 'production' && !process.env.PORT)
+  );
+}
+
 class Database {
   private data: DatabaseSchema;
 
@@ -602,10 +611,8 @@ class Database {
     this.data = this.loadData();
   }
 
-  private isReadOnlyEnv = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
-
   private loadData(): DatabaseSchema {
-    if (this.isReadOnlyEnv) {
+    if (isReadOnlyFileSystem()) {
       return JSON.parse(JSON.stringify(initialData));
     }
     try {
@@ -624,7 +631,7 @@ class Database {
   }
 
   private saveDataDirect(data: DatabaseSchema) {
-    if (this.isReadOnlyEnv) return;
+    if (isReadOnlyFileSystem()) return;
     try {
       if (!fs.existsSync(DATA_DIR)) {
         fs.mkdirSync(DATA_DIR, { recursive: true });
