@@ -42,10 +42,16 @@ const MainApp: React.FC = () => {
     }
   }, [user?.role, isTeacher, isStudent]);
 
+  const [showRetryPrompt, setShowRetryPrompt] = useState<boolean>(false);
+  useEffect(() => {
+    const timer = setTimeout(() => setShowRetryPrompt(true), 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
   if (isLoading || !user) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-100 p-4">
-        <div className="flex flex-col items-center gap-4 text-center">
+        <div className="flex flex-col items-center gap-4 text-center max-w-md">
           <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
             <div className="w-6 h-6 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin"></div>
           </div>
@@ -53,6 +59,14 @@ const MainApp: React.FC = () => {
             <h2 className="text-base font-bold text-white tracking-wide">AI LEARNING HUB • GDPT 2018</h2>
             <p className="text-xs text-slate-400 mt-1">Đang nạp dữ liệu giáo dục và cấu hình sư phạm số...</p>
           </div>
+          {showRetryPrompt && (
+            <button
+              onClick={() => window.location.reload()}
+              className="mt-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg transition shadow-lg shadow-emerald-900/30 cursor-pointer"
+            >
+              Tải lại trang ngay
+            </button>
+          )}
         </div>
       </div>
     );
